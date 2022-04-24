@@ -147,6 +147,9 @@
   <ItemGroup>
     <ClInclude Include="BoyerMoore.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="memorydump.bin" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

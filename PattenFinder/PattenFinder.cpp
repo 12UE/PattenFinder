@@ -11,20 +11,19 @@
 #include<chrono>
 #include"BoyerMoore.h"
 using namespace std;
-bool bDataCompare(BYTE * pData, BYTE * bMask, char * szMask) {
-	for (; *szMask; ++szMask, ++pData, ++bMask)
-		if (*szMask == 'x' && *pData != *bMask)
-			return FALSE;
-
-	return (*szMask == NULL);
-}
 DWORD64 ForceFindPatternEx(BYTE *pData,int datasize,BYTE * bMask, char * szMask) {//暴力匹配
-	int result=0x0;
+	static const auto bDataCompare=[&] (BYTE * pData, BYTE * bMask, char * szMask)->bool {
+		for (; *szMask; ++szMask, ++pData, ++bMask)
+			if (*szMask == 'x' && *pData != *bMask)
+				return FALSE;
+
+		return (*szMask == NULL);
+	};
 	for (int i=0; i < datasize; i++) {//遍历进程内存
 		if (bDataCompare((BYTE *)(pData + i), bMask, szMask))
-			result=i;
+			return i;
 	}
-	return result;
+	return 0;
 }
 
 void GetNext(PBYTE patten, int pattenlength, int * next, LPSTR szMask) {
