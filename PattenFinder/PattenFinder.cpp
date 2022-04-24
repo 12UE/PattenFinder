@@ -15,11 +15,10 @@ DWORD64 ForceFindPatternEx(BYTE *pData,int datasize,BYTE * bMask, char * szMask)
 	static const auto bDataCompare=[&] (BYTE * pData, BYTE * bMask, char * szMask)->bool {
 		for (; *szMask; ++szMask, ++pData, ++bMask)
 			if (*szMask == 'x' && *pData != *bMask)
-				return FALSE;
-
+				return false;
 		return (*szMask == NULL);
 	};
-	for (int i=0; i < datasize; i++) {//遍历进程内存
+	for (unsigned int i=0; i < datasize; ++i) {//遍历进程内存
 		if (bDataCompare((BYTE *)(pData + i), bMask, szMask))
 			return i;
 	}
