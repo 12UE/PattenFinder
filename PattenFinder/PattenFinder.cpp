@@ -18,11 +18,13 @@ bool bDataCompare(BYTE * pData, BYTE * bMask, char * szMask) {
 	return (*szMask == NULL);
 }
 DWORD64 ForceFindPatternEx(BYTE *pData,int datasize,BYTE * bMask, char * szMask) {//暴力匹配
+	int result=0x0;
+#pragma omp parallel for num_threads(4)
 	for (int i=0; i < datasize; i++) {//遍历进程内存
 		if (bDataCompare((BYTE *)(pData + i), bMask, szMask))
-			return i;
+			result=i;
 	}
-	return NULL;
+	return result;
 }
 
 void GetNext(PBYTE patten, int pattenlength, int * next, LPSTR szMask) {
@@ -56,10 +58,11 @@ bool FindPatten(PBYTE pData, int begin, int end, PBYTE Patten, int PattenLen, in
 	int i=begin;
 	int j=-1;
 	while (i < datalength && j < PattenLen) {
-		if (j == -1 || szmask[j] == '?' || pData[i] == Patten[j]) {
-			i++;
-			j++;
-		} else {
+		if (j == -1 || szmask[j] != 'x' || pData[i] == Patten[j]) {
+			++i;
+			++j;
+		}else {
+			i=i+j-next[j];
 			j=next[j];
 		}
 	}
@@ -123,9 +126,9 @@ int main() {
 	auto result2=ForceFindPatternEx(pData, size, patten, szMask);
 	auto usetime2=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin).count();
 	cout << "特征码正确地址 =0x26a6699" << endl;
-	cout << "KMP搜索耗时：" << usetime << "ms" << endl;
+	cout << "KMP搜索耗时：" << dec << usetime << "ms" << endl;
 	cout << "KMP搜寻结果地址   =0x" << hex << result[0] << endl;
-	cout << "暴力搜索耗时：" << usetime2 << "ms" << endl;
+	cout << "暴力搜索耗时：" << dec << usetime2 << "ms" << endl;
 	cout << "暴力搜寻结果地址   =0x" << hex << result2 << endl;
 	cout << "真实数据：";
 	for (auto i=result[0]; i < result[0] + pattenSize; i++) {
