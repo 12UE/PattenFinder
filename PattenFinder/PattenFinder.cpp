@@ -96,7 +96,6 @@ bool FindPattenEx(PBYTE pData, PBYTE patten, int datasize, LPSTR szmask, std::ve
 	for(int i=0;i<parts-1;i++){
 		int nSegBegin=segment*(i+1)-PattenLen;
 		int nSegEnd=begin+segment*(i+1)+PattenLen;
-		cout<<hex<<"区间 "<<i<<" 的起始位置"<< nSegBegin <<"结束位置"<< nSegEnd <<endl;
 		FindPatten(pData, nSegBegin, nSegEnd,patten,PattenLen,next,szmask,result);
 	}
 	delete[] next;
@@ -117,7 +116,7 @@ int main() {
 	file.read((LPSTR)pData, size);
 	file.close();
 	cout << "文件大小：" << (float)size / 1024 / 1024 << "MB" << endl;
-	PBYTE patten=(PBYTE)"\x66\x6A\x00\x01\x00\x00\x00\x98";
+	PBYTE patten=(PBYTE)"\x66\x6A\x42\x01\x00\x00\x00\x98";
 	//print patten
 	cout << "模式串为：";
 	for (int i=0; i < 8; i++) {
