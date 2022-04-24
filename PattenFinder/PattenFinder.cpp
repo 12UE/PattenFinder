@@ -9,6 +9,7 @@
 #include<algorithm>
 #include<functional>
 #include<chrono>
+#include<thread>
 #include"BoyerMoore.h"
 using namespace std;
 DWORD64 ForceFindPatternEx(BYTE *pData,int datasize,BYTE * bMask, char * szMask) {//暴力匹配
@@ -77,8 +78,8 @@ bool FindPattenEx(PBYTE pData, PBYTE patten, int datasize, LPSTR szmask, std::ve
 	GetNext(patten, PattenLen, next, szmask);
 	int begin=0;
 	int end=datasize;
-	//把数据分为4个部分
-	int parts=4;
+	//获取系统最大并发量
+	int parts=std::thread::hardware_concurrency()/2;
 	int segment=datasize / parts;
 	//利用openmp 并行搜索
 #pragma omp parallel for num_threads(parts)
