@@ -132,9 +132,8 @@ int main() {
 	auto maskSize=8;
 	SetThreadPriorityBoost(GetCurrentThread(), TRUE);
 	cout << "特征码正确地址 =0x26a6699" << endl;
-	
-	auto begin=std::chrono::high_resolution_clock::now();
 	std::vector<int> result;
+	auto begin=std::chrono::high_resolution_clock::now();
 	bool bRet=FindPattenEx(pData, patten, size, szMask, result);
 	auto usetime=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin).count();
 	cout << "KMP搜索耗时：" << dec << usetime << "ms" << endl;
@@ -151,11 +150,12 @@ int main() {
 	auto usetime2=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin).count();
 	cout << "暴力搜索耗时：" << dec << usetime2 << "ms" << endl;
 	cout << "暴力搜寻结果地址   =0x" << hex << result2 << endl;
-
+	std::vector<int> result3;
 	begin=std::chrono::high_resolution_clock::now();
-	BoyerMoore((PBYTE)"\x66\x6a\x42\x1\x0\x0\x0\x98",pattenSize,pData,size);
+	bool boyret= BoyerMoore((PBYTE)"\x66\x6a\x42\x1\x0\x0\x0\x98",pattenSize,pData,size, result3);
 	auto usetime3=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin).count();
 	cout << "Boyer-Moore搜索耗时：" << dec << usetime3 << "ms" << endl;
+	cout << "Boyer-Moore搜寻结果地址   =0x" << hex << result3[0] << endl;
 	
 	cout << "真实数据：";
 	for (auto i=result2; i < result2 + pattenSize; i++) {

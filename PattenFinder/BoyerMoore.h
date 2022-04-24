@@ -86,7 +86,7 @@ void PreBmGs(PBYTE pattern, int m, int bmGs[]) {
     //print(bmGs, m, (char*)"bmGs[]");
 }
 
-void BoyerMoore(PBYTE pattern, int m, PBYTE text, int n) {
+bool BoyerMoore(PBYTE pattern, int m, PBYTE text, int n,std::vector<int> &result) {
     int i, j, bmBc[MAX_CHAR], bmGs[SIZE];
 
     // Preprocessing
@@ -98,12 +98,11 @@ void BoyerMoore(PBYTE pattern, int m, PBYTE text, int n) {
     while (j <= n - m) {
         for (i=m - 1; i >= 0 && pattern[i] == text[i + j]; i--);
         if (i < 0) {
-            //printf("Find it, the position is 0x%x\n", j);
+            result.push_back(j);
             j+=bmGs[0];
-            return;
+            return true;
         } else
             j+=MAX(bmBc[text[i + j]] - m + 1 + i, bmGs[i]);
     }
-
-   // printf("No find.\n");
+    return false;
 }
