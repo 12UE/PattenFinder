@@ -135,8 +135,7 @@ public:
 		};
 		std::vector<std::future<void>> futures;
 		for (auto & p : m_patterns) {
-			auto future=std::async(std::launch::async|std::launch::deferred,Pfind, m_pData, m_DataSize, &p);
-			futures.push_back(std::move(future));
+			futures.push_back(std::move(std::async(std::launch::async | std::launch::deferred, Pfind, m_pData, m_DataSize, &p)));
 		}
 	}
 };
@@ -158,7 +157,7 @@ int main() {
 	PBYTE patten=(PBYTE)"\x66\x6A\x42\x01\x00\x00\x00\x98";
 	//print patten
 	cout << "模式串为：";
-	for (int i=0; i < strlen((char*)patten); i++) {
+	for (int i=0; i < 8; i++) {
 		cout <<"\\x" << hex << (int)patten[i];
 	}
 	cout << endl;
