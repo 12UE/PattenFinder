@@ -44,6 +44,13 @@
         "xtr1common": "cpp",
         "xutility": "cpp",
         "chrono": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "future": "cpp",
+        "atomic": "cpp",
+        "condition_variable": "cpp",
+        "resumable": "cpp",
+        "mutex": "cpp",
+        "xthread": "cpp",
+        "thread": "cpp"
     }
 }
