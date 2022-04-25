@@ -158,7 +158,7 @@ int main() {
 	PBYTE patten=(PBYTE)"\x66\x6A\x42\x01\x00\x00\x00\x98";
 	//print patten
 	cout << "模式串为：";
-	for (int i=0; i < 1; i++) {
+	for (int i=0; i < strlen((char*)patten); i++) {
 		cout <<"\\x" << hex << (int)patten[i];
 	}
 	cout << endl;
@@ -173,37 +173,35 @@ int main() {
 	auto maskSize=8;
 	SetThreadPriorityBoost(GetCurrentThread(), TRUE);
 	cout << "特征码正确地址 =0x26a6699" << endl;
-
 	PattenFinder pf(pData, size);
-	for (int i=0; i < BENCHMARKTIMES; i++) {
-		pf.AddPattern(patten, pattenSize, maskSize,szMask);
-	}
-	std::vector<int> result;
 	auto begin=std::chrono::high_resolution_clock::now();
+	for (int i=0; i < BENCHMARKTIMES; i++) {
+		pf.AddPattern(patten, pattenSize, maskSize, szMask);
+	}
 	std::vector<std::future<bool>> rets;
 	pf.Find();
 	auto usetime=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin).count();
 	cout << "KMP搜索耗时：" << dec << usetime << "ms" << endl;
-	cout << "搜索结果：" << endl;
-	for (auto & p : pf.m_patterns) {
-		if (p.m_Bfind) {
-			cout << "模式串：";
-			for (int i = 0; i < p.m_pattenlength; i++) {
-				cout << "\\x" << hex << (int)p.m_patten[i];
-			}
-			cout << endl;
-			cout << "掩码：";
-			for (int i = 0; i < p.m_masklength; i++) {
-				cout << p.m_szmask[i];
-			}
-			cout << endl;
-			cout << "结果：";
-			for (auto & r : p.m_result) {
-				cout << "0x" << hex << r << " ";
-			}
-			cout << endl;
-		}
-	}
+	//cout << "搜索结果：" << endl;
+	//for (auto & p : pf.m_patterns) {
+	//	if (p.m_Bfind) {
+	//		cout << "模式串：";
+	//		for (int i = 0; i < p.m_pattenlength; i++) {
+	//			cout << "\\x" << hex << (int)p.m_patten[i];
+	//		}
+	//		cout << endl;
+	//		cout << "掩码：";
+	//		for (int i = 0; i < p.m_masklength; i++) {
+	//			cout << p.m_szmask[i];
+	//		}
+	//		cout << endl;
+	//		cout << "结果：";
+	//		for (auto & r : p.m_result) {
+	//			cout << "0x" << hex << r << " ";
+	//		}
+	//		cout << endl;
+	//	}
+	//}
 
 
 
@@ -231,5 +229,6 @@ int main() {
 		cout << "\\x" << hex << (int)pData[i];
 	}
 	delete[] pData;
+	system("PAUSE");
 	return 0;
 }
