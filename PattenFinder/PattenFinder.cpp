@@ -173,6 +173,7 @@ int main() {
 	auto maskSize=8;
 	SetThreadPriorityBoost(GetCurrentThread(), TRUE);
 	cout << "特征码正确地址 =0x26a6699" << endl;
+	cout << "搜索" <<dec<< BENCHMARKTIMES << "次" << endl;
 	PattenFinder pf(pData, size);
 	auto begin=std::chrono::high_resolution_clock::now();
 	for (int i=0; i < BENCHMARKTIMES; i++) {
