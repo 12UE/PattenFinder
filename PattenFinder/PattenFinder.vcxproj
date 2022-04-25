@@ -130,7 +130,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OpenMPSupport>true</OpenMPSupport>
       <Optimization>Disabled</Optimization>
       <OmitFramePointers>true</OmitFramePointers>
@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoyerMoore.h" />
+    <ClInclude Include="KMPPattenFinder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="memorydump.bin" />
