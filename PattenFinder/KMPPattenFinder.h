@@ -57,18 +57,18 @@ private:
 			}
 		};
 		auto PattenLen=strlen(szmask);
-		auto next=new int[PattenLen];
-		memset(next, 0, sizeof(int) * PattenLen);
-		GetNext(patten, PattenLen, next, szmask);
+		auto next=std::make_unique<int[]>(PattenLen);
+		memset(next.get(), 0, sizeof(int) * PattenLen);
+		GetNext(patten, PattenLen, next.get(), szmask);
 		int parts=6;
 		int segment=datasize / parts;
 #pragma omp parallel for num_threads(parts)
 		for (int i=0; i < parts; i++) {
-			FindPatten(pData, i * segment, segment * (i + 1), patten, PattenLen, next, szmask, result);
+			FindPatten(pData, i * segment, segment * (i + 1), patten, PattenLen, next.get(), szmask, result);
 		}
 #pragma omp parallel for num_threads(parts-1)
 		for (int i=0; i < parts - 1; i++) {
-			FindPatten(pData, segment * (i + 1) - PattenLen, segment * (i + 1) + PattenLen, patten, PattenLen, next, szmask, result);
+			FindPatten(pData, segment * (i + 1) - PattenLen, segment * (i + 1) + PattenLen, patten, PattenLen, next.get(), szmask, result);
 		}
 		return result.size() > 0;
 	}
@@ -91,10 +91,10 @@ public:
 			futures.push_back(std::move(std::async(std::launch::async | std::launch::deferred, Pfind, m_pData, m_DataSize, &p)));
 		}
 	}
-	std::vector<int> GetResult(int index) {
+	const std::vector<int>& GetResult(int index) {
 		return m_patterns[index].m_result;
 	}
-	std::vector<int> GetResult(BYTE * patten) {
+	const std::vector<int>& GetResult(BYTE * patten) {
 		for (auto & p : m_patterns) {
 			if (memcmp(p.m_patten, patten, p.m_pattenlength) == 0) {
 				return p.m_result;
